@@ -13,8 +13,6 @@ export const readLinesFromFile = async (filename) => {
   return text.split(/\s/).filter(Boolean);
 };
 
-const isDigit = (ch) => /\d/.test(ch)
-
 const mapping = new Map([
   ["one", "1"],
   ["two", "2"],
@@ -27,65 +25,17 @@ const mapping = new Map([
   ["nine", "9"],
 ]);
 
-const FORWARDS_SENTINEL = Number.MAX_SAFE_INTEGER;
-const BACKWARDS_SENTINEL = Number.MIN_SAFE_INTEGER;
+const isDigit = (ch) => /\d/.test(ch)
 
-const DIRECTION = Object.freeze({
-  FORWARDS: "FORWARDS",
-  BACKWARDS: "BACKWARDS",
-});
-
-const findNumberAsWord = (line, direction) => {
-  const isForwards = direction === DIRECTION.FORWARDS;
-
-  const kvps = Array.from(mapping.entries());
-
-  const lookups = kvps.map(([word, digit]) => {
-    const index = isForwards ? line.indexOf(word) : line.lastIndexOf(word);
-    return { index, digit }
-  });
-
-  const positiveLookups = lookups.filter(({ index }) => index >= 0);
-
-  const sortedLookups = positiveLookups.sort((a, b) =>
-    isForwards
-      ? a.index - b.index
-      : b.index - a.index
-  );
-
-  if (sortedLookups.length > 0) {
-    return sortedLookups[0];
-  }
-
-  return { index: isForwards ? FORWARDS_SENTINEL : BACKWARDS_SENTINEL };
-};
-
-const findNumberAsDigit = (line, direction) => {
-  const isForwards = direction === DIRECTION.FORWARDS;
-  const chars = Array.from(line);
-  const index = isForwards ? chars.findIndex(isDigit) : chars.findLastIndex(isDigit);
-  if (index >= 0) {
-    const digit = chars[index];
-    return { index, digit };
-  }
-  return { index: isForwards ? FORWARDS_SENTINEL : BACKWARDS_SENTINEL };
-};
-
-const findFirstNumber = (line) => {
-  const wordResult = findNumberAsWord(line, DIRECTION.FORWARDS);
-  const digitResult = findNumberAsDigit(line, DIRECTION.FORWARDS);
-  return wordResult.index < digitResult.index ? wordResult.digit : digitResult.digit;
-};
-
-const findSecondNumber = (line) => {
-  const wordResult = findNumberAsWord(line, DIRECTION.BACKWARDS);
-  const digitResult = findNumberAsDigit(line, DIRECTION.BACKWARDS);
-  return wordResult.index > digitResult.index ? wordResult.digit : digitResult.digit;
-};
+const matchToNumber = (match) => isDigit(match) ? match : mapping.get(match);
 
 export const lineToNumber = (line) => {
-  const numberString = findFirstNumber(line) + findSecondNumber(line);
-  return Number(numberString)
+  const matches = Array.from(line.matchAll(/(one|two|three|four|five|six|seven|eight|nine|\d)/g));
+  const firstMatch = matches[0][0];
+  const lastMatch = matches[matches.length - 1][0];
+  const firstNumber = matchToNumber(firstMatch);
+  const secondNumber = matchToNumber(lastMatch);
+  return Number(firstNumber + secondNumber);
 };
 
 export const linesToNumbers = (lines) => {
