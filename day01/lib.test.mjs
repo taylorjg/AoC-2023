@@ -1,16 +1,6 @@
-import { readLinesFromFile, lineToNumber, linesToNumbers, solveIt } from "./lib.mjs";
+import { lineToNumber, linesToNumbers, solveIt } from "./lib.mjs";
 
-describe("lib test", () => {
-  it("readLinesFromFile", async () => {
-    const actual = await readLinesFromFile("test-input-part-1.txt");
-    expect(actual).toEqual([
-      "1abc2",
-      "pqr3stu8vwx",
-      "a1b2c3d4e5f",
-      "treb7uchet",
-    ]);
-  });
-
+describe("lib tests", () => {
   it("read number from line", () => {
     expect(lineToNumber("1abc2")).toBe(12);
   });

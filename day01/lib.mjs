@@ -1,14 +1,4 @@
-import { promises as fs } from "fs";
-import { resolve } from "path";
-
-import { getDirname, sum, first, last } from "../utils.mjs";
-
-export const readLinesFromFile = async (filename) => {
-  const dirname = getDirname();
-  const path = resolve(dirname, "day01", filename);
-  const text = await fs.readFile(path, "utf-8");
-  return text.split(/\s/).filter(Boolean);
-};
+import { readLinesFromFile, sum, first, last } from "../utils.mjs";
 
 const mapping = new Map([
   ["one", "1"],
@@ -32,7 +22,7 @@ export const lineToNumber = (line) => {
   const [lastMatchString] = last(matches);
   const firstDigit = matchStringToDigit(firstMatchString);
   const lastDigit = matchStringToDigit(lastMatchString);
-  return Number(firstDigit + lastDigit);
+  return Number(`${firstDigit}${lastDigit}`);
 };
 
 export const linesToNumbers = (lines) => {
@@ -40,7 +30,7 @@ export const linesToNumbers = (lines) => {
 };
 
 export const solveIt = async (filename) => {
-  const lines = await readLinesFromFile(filename);
+  const lines = await readLinesFromFile("day01", filename);
   const numbers = linesToNumbers(lines);
   return sum(numbers);
 };
