@@ -34,6 +34,10 @@ describe("lib tests", () => {
     ])).toEqual([29, 83, 13, 24, 42, 14, 76]);
   });
 
+  it("read number from line (part 2, overlapping words)", () => {
+    expect(lineToNumber("9963onefourthree6oneightq")).toBe(98);
+  });
+
   it("solveIt (part 1)", async () => {
     const actual = await solveIt("test-input-part-1.txt");
     expect(actual).toBe(142);

@@ -15,5 +15,4 @@ export const readLinesFromFile = async (folder, filename) => {
 
 export const sum = (ns) => ns.reduce((acc, n) => acc + n, 0);
 
-export const first = (xs) => xs[0];
-export const last = (xs) => xs[xs.length - 1];
+export const reverseString = (s) => Array.from(s).reverse().join("");

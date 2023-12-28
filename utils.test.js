@@ -1,4 +1,4 @@
-import { readLinesFromFile, sum, first, last } from "./utils.mjs";
+import { readLinesFromFile, sum, reverseString } from "./utils.mjs";
 
 describe("utils tests", () => {
   it("readLinesFromFile", async () => {
@@ -15,11 +15,7 @@ describe("utils tests", () => {
     expect(sum([1, 2, 3])).toBe(6);
   });
 
-  it("first", () => {
-    expect(first([1, 2, 3])).toBe(1);
-  });
-
-  it("last", () => {
-    expect(last([1, 2, 3])).toBe(3);
+  it("reverseString", () => {
+    expect(reverseString("abc")).toBe("cba");
   });
 });

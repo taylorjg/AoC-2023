@@ -1,4 +1,4 @@
-import { readLinesFromFile, sum, first, last } from "../utils.mjs";
+import { readLinesFromFile, sum, reverseString } from "../utils.mjs";
 
 const mapping = new Map([
   ["one", "1"],
@@ -17,9 +17,15 @@ const isDigit = (ch) => /\d/.test(ch)
 const matchStringToDigit = (s) => isDigit(s) ? s : mapping.get(s);
 
 export const lineToNumber = (line) => {
-  const matches = Array.from(line.matchAll(/(one|two|three|four|five|six|seven|eight|nine|\d)/g));
-  const [firstMatchString] = first(matches);
-  const [lastMatchString] = last(matches);
+  const reversedLine = reverseString(line);
+  const words = Array.from(mapping.keys());
+  const reversedWords = words.map(reverseString);
+  const regexNormalWords = new RegExp(`(${[...words, "[1-9]"].join("|")})`, "g");
+  const regexReversedWords = new RegExp(`(${[...reversedWords, "[1-9]"].join("|")})`, "g");
+  const matches = Array.from(line.matchAll(regexNormalWords));
+  const reverseMatches = Array.from(reversedLine.matchAll(regexReversedWords));
+  const firstMatchString = matches[0][0];
+  const lastMatchString = reverseString(reverseMatches[0][0]);
   const firstDigit = matchStringToDigit(firstMatchString);
   const lastDigit = matchStringToDigit(lastMatchString);
   return Number(`${firstDigit}${lastDigit}`);
