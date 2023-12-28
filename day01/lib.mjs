@@ -1,14 +1,11 @@
 import { promises as fs } from "fs";
-import { resolve, dirname } from "path";
-import { fileURLToPath } from "url";
+import { resolve } from "path";
 
-// Problems trying to use __dirname in a .mjs file
-// https://byby.dev/node-dirname-not-defined
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { getDirname, sum, first, last } from "../utils.mjs";
 
 export const readLinesFromFile = async (filename) => {
-  const path = resolve(__dirname, filename);
+  const dirname = getDirname();
+  const path = resolve(dirname, "day01", filename);
   const text = await fs.readFile(path, "utf-8");
   return text.split(/\s/).filter(Boolean);
 };
@@ -27,25 +24,23 @@ const mapping = new Map([
 
 const isDigit = (ch) => /\d/.test(ch)
 
-const matchToNumber = (match) => isDigit(match) ? match : mapping.get(match);
+const matchStringToDigit = (s) => isDigit(s) ? s : mapping.get(s);
 
 export const lineToNumber = (line) => {
   const matches = Array.from(line.matchAll(/(one|two|three|four|five|six|seven|eight|nine|\d)/g));
-  const firstMatch = matches[0][0];
-  const lastMatch = matches[matches.length - 1][0];
-  const firstNumber = matchToNumber(firstMatch);
-  const secondNumber = matchToNumber(lastMatch);
-  return Number(firstNumber + secondNumber);
+  const [firstMatchString] = first(matches);
+  const [lastMatchString] = last(matches);
+  const firstDigit = matchStringToDigit(firstMatchString);
+  const lastDigit = matchStringToDigit(lastMatchString);
+  return Number(firstDigit + lastDigit);
 };
 
 export const linesToNumbers = (lines) => {
   return lines.map(lineToNumber);
 };
 
-const sumNumbers = (ns) => ns.reduce((acc, n) => acc + n, 0);
-
 export const solveIt = async (filename) => {
   const lines = await readLinesFromFile(filename);
   const numbers = linesToNumbers(lines);
-  return sumNumbers(numbers);
+  return sum(numbers);
 };
