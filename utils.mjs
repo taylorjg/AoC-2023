@@ -16,3 +16,5 @@ export const readLinesFromFile = async (folder, filename) => {
 export const sum = (ns) => ns.reduce((acc, n) => acc + n, 0);
 
 export const reverseString = (s) => Array.from(s).reverse().join("");
+
+export const range = n => Array.from(Array(n).keys());
