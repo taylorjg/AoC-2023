@@ -1,4 +1,4 @@
-import { readLinesFromFile, sum, reverseString, range } from "./utils.mjs";
+import { readLinesFromFile, sum, product, reverseString, range } from "./utils.mjs";
 
 describe("utils tests", () => {
   it("readLinesFromFile", async () => {
@@ -13,6 +13,10 @@ describe("utils tests", () => {
 
   it("sum", () => {
     expect(sum([1, 2, 3])).toBe(6);
+  });
+
+  it("product", () => {
+    expect(product([2, 3, 4])).toBe(24);
   });
 
   it("reverseString", () => {
